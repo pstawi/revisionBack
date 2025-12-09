@@ -1,0 +1,13 @@
+
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+export const checkRole = (req, res, next) => {
+    const userRole = req.user.role;
+
+    if (userRole !== 1) {
+        return res.status(403).json({ message: 'Access denied: insufficient permissions' });
+    }
+    next();
+}
