@@ -8,7 +8,7 @@ export const addUser = async (prenom, nom, login, password) =>{
 }
 
 export const getAllUsers = async () => {
-    const selectUsers = "SELECT prenom, nom, login, password, roleId FROM user";
+    const selectUsers = "SELECT id, prenom, nom, login, password, roleId FROM user";
     const [result] = await connexion.query(selectUsers);
     return result;
 }
