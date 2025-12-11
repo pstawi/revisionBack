@@ -64,6 +64,36 @@ export const deleteUser = async (req, res) => {
     }
 }
 
+export const updateUser = async (req, res) => {
+
+    const id = req.params.id;
+    const { prenom, nom, login, password, roleId } = req.body;
+
+    try {
+        // Vérifier que l'utilisateur existe
+        const existingUser = await userModel.getUserById(id);
+        if (existingUser.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        let hashPassword = null;
+        if (password) {
+            hashPassword = await bcrypt.hash(password, 10);
+        }
+
+        const result = await userModel.updateUser(id, prenom, nom, login, hashPassword, roleId);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        res.status(200).json({ message: "User updated successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 export const login = async (req, res) => {
 
     const { login, password } = req.body;
